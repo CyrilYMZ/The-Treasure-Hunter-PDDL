@@ -1,0 +1,82 @@
+(define (problem p2-dungeon)
+  (:domain Dungeon)
+
+  ; Naming convention:
+  ; - loc{i}{j} refers to the location at the i'th column and j'th row (starting in top left corner)
+  ; - c{i}{j}{h}{k} refers to the corridor connecting loc{i}{j} and loc{h}{k}
+  (:objects
+    loc21 loc12 loc22 loc32 loc42 loc23 - location
+    key1 key2 key3 key4 - key
+    c2122 c1222 c2232 c3242 c2223 - corridor
+  )
+
+    (:init
+
+    ; Hero location and carrying status
+    (hero-at loc22)
+    (hand-free)
+    (not (holding key1))
+    (not (holding key2))
+    (not (holding key3))
+    (not (holding key4))
+
+    ; Location <> Corridor Connections
+    ; Each one corridor should have 2 pairs of ?from ?to
+    (connected c1222 loc12 loc22) (connected c1222 loc22 loc12)
+    (connected c2122 loc21 loc22) (connected c2122 loc22 loc21)
+    (connected c2232 loc22 loc32) (connected c2232 loc32 loc22)
+    (connected c3242 loc32 loc42) (connected c3242 loc42 loc32)
+    (connected c2223 loc22 loc23) (connected c2223 loc23 loc22)
+    
+
+    ; Key locations
+    (key-at key1 loc12)
+    (key-at key2 loc21)
+    (key-at key3 loc22)
+    (key-at key4 loc23)
+    
+    ; Unlocked corridors
+
+    ; Locked corridors
+    (locked c1222 yellow)
+    (locked c2232 yellow)
+    (locked c2122 purple)
+    (locked c2223 green)
+    (locked c3242 rainbow)
+    
+    ; Room loc that can unlock a corridor
+    (room loc12 yellow c1222)
+    (room loc22 purple c2122)
+    (room loc22 yellow c2232)
+    (room loc22 yellow c1222)
+    (room loc22 green c2223)
+    (room loc32 yellow c2232)
+    (room loc21 purple c2122)
+    (room loc23 green c2223)
+    (room loc32 rainbow c3242)
+    
+
+    ; Risky corridors
+    
+
+    ; Key colours
+    (key-col key1 rainbow)
+    (key-col key2 green)
+    (key-col key3 purple)
+    (key-col key4 yellow)
+
+    ; Key usage properties (one use, two use, etc)
+    (one-use key1)
+    (one-use key2)
+    (one-use key3)
+    (two-use key4)
+
+  )
+  (:goal
+    (and
+      ; Hero's final location goes here
+      (hero-at loc42)
+    )
+  )
+
+)

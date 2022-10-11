@@ -1,0 +1,95 @@
+(define (problem p4-dungeon)
+  (:domain Dungeon)
+
+  ; Come up with your own problem instance (see assignment for details)
+  ; NOTE: You _may_ use new objects for this problem only.
+
+  ; Naming convention:
+  ; - loc{i}{j} refers to the location at the i'th column and j'th row (starting in top left corner)
+  ; - c{i}{j}{h}{k} refers to the corridor connecting loc{i}{j} and loc{h}{k}
+  (:objects
+    loc11 loc12 loc22 loc23 loc24 loc31 loc32 loc42 - location
+    c1112 c1222 c2232 c3132 c3242 c1223 c2223 c2324 c3223 - corridor
+    key1 key2 key3 key4 key5 - key
+  )
+
+  (:init
+
+    ; Hero location and carrying status
+    (hero-at loc42)
+    (hand-free)
+    (not(holding key1))
+    (not(holding key2))
+    (not(holding key3))
+    (not(holding key4))
+    (not(holding key5))
+
+    ; Locationg <> Corridor Connections
+    (connected c1112 loc11 loc12) (connected c1112 loc12 loc11)
+    (connected c1222 loc12 loc22) (connected c1222 loc22 loc12)
+    (connected c2232 loc22 loc32) (connected c2232 loc32 loc22)
+    (connected c3132 loc31 loc32) (connected c3132 loc32 loc31)
+    (connected c3242 loc32 loc42) (connected c3242 loc42 loc32)
+    (connected c1223 loc12 loc23) (connected c1223 loc23 loc12)
+    (connected c2223 loc22 loc23) (connected c2223 loc23 loc22)
+    (connected c3223 loc32 loc23) (connected c3223 loc23 loc32)
+    (connected c2324 loc23 loc24) (connected c2324 loc24 loc23)
+
+    ; Key locations
+    (key-at key1 loc11)
+    (key-at key2 loc22)
+    (key-at key3 loc31)
+    (key-at key4 loc32)
+    (key-at key5 loc23)
+    
+    ; Unlocked corridors
+    (unlocked c1112)
+    (unlocked c2223)
+    (unlocked c3242)
+    (unlocked c3223)
+
+    ; Locked corridors
+    (locked c1222 green)
+    (locked c1223 rainbow)
+    (locked c2223 red)
+    (locked c3132 yellow)
+    (locked c2324 purple)
+    
+    ; Room loc that can unlock a corridor
+    (room loc12 green c1222)
+    (room loc12 rainbow c1223)
+    (room loc22 green c1222)
+    (room loc22 red c2223)
+    (room loc32 yellow c3132)
+    (room loc23 red c2223)
+    (room loc23 purple c2324)
+    (room loc23 rainbow c1223)
+    (room loc24 purple c2324)
+
+    ; Risky corridors
+    (Risky c2223)
+
+    ; Key colours
+    (key-col key1 yellow)
+    (key-col key2 red)
+    (key-col key3 purple)
+    (key-col key4 green)
+    (key-col key5 rainbow)
+
+
+    ; Key usage properties (one use, two use, etc)
+    (not(unusable key2))
+    (two-use key1)
+    (one-use key3)
+    (one-use key4)
+    (one-use key5)
+
+  )
+  (:goal
+    (and
+      ; Hero's final location goes here
+      (hero-at loc24)
+    )
+  )
+
+)
